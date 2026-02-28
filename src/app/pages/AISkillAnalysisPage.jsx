@@ -27,7 +27,7 @@ const stats = [
 const skillCategories = [
   {
     category: 'Frontend',
-    icon: Code,
+    icon,
     skills: [
       { name: 'React', level: 85, trend: 'up' },
       { name: 'TypeScript', level: 70, trend: 'up' },
@@ -37,7 +37,7 @@ const skillCategories = [
   },
   {
     category: 'Backend',
-    icon: Server,
+    icon,
     skills: [
       { name: 'Node.js', level: 80, trend: 'stable' },
       { name: 'Express', level: 75, trend: 'stable' },
@@ -47,7 +47,7 @@ const skillCategories = [
   },
   {
     category: 'Database',
-    icon: Database,
+    icon,
     skills: [
       { name: 'PostgreSQL', level: 70, trend: 'stable' },
       { name: 'MongoDB', level: 60, trend: 'up' },
@@ -57,7 +57,7 @@ const skillCategories = [
   },
   {
     category: 'Cloud & DevOps',
-    icon: Cloud,
+    icon,
     skills: [
       { name: 'AWS', level: 55, trend: 'up' },
       { name: 'Docker', level: 50, trend: 'up' },

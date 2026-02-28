@@ -164,32 +164,32 @@ export default function LandingPage() {
 
 const features = [
   {
-    icon: Brain,
+    icon,
     title: "AI Skill Analysis",
     description: "Upload your resume and let AI analyze your skills, experience, and career trajectory in seconds."
   },
   {
-    icon: Target,
+    icon,
     title: "Gap Detection",
     description: "Identify missing skills based on real-time market demand and your career goals."
   },
   {
-    icon: TrendingUp,
+    icon,
     title: "Smart Roadmaps",
     description: "Get personalized learning paths that update weekly based on industry trends."
   },
   {
-    icon: Globe,
+    icon,
     title: "Market Insights",
     description: "Access real-time data on trending skills, salaries, and job opportunities."
   },
   {
-    icon: GitBranch,
+    icon,
     title: "Career Simulation",
     description: "See how learning new skills impacts your salary and career opportunities."
   },
   {
-    icon: Award,
+    icon,
     title: "Job Readiness",
     description: "Track your progress and get a real-time score on your job market readiness."
   }
@@ -204,17 +204,17 @@ const stats = [
 
 const steps = [
   {
-    icon: Target,
+    icon,
     title: "Upload & Connect",
     description: "Upload your resume and connect your GitHub and LinkedIn profiles"
   },
   {
-    icon: Brain,
+    icon,
     title: "AI Analysis",
     description: "Our AI analyzes your skills, experience, and identifies gaps"
   },
   {
-    icon: TrendingUp,
+    icon,
     title: "Get Your Roadmap",
     description: "Receive a personalized learning roadmap with curated resources"
   }

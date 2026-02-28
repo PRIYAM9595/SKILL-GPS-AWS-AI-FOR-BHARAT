@@ -204,7 +204,7 @@ export default function ProgressAnalyticsPage() {
       
         
           
-            Keep the momentum going!
+            Keep the momentum going
             Check your weekly planner to stay on track
           
           

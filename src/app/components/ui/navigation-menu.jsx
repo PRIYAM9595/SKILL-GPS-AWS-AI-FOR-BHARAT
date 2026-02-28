@@ -1,4 +1,4 @@
-﻿import * from "react";
+﻿import React from "react";
 import * from "@radix-ui/react-navigation-menu";
 import { cva } from "class-variance-authority";
 import { ChevronDownIcon } from "lucide-react";

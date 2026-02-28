@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import * from "react";
+import React from "react";
 import * from "@radix-ui/react-context-menu";
 import { CheckIcon, ChevronRightIcon, CircleIcon } from "lucide-react";
 
@@ -93,7 +93,7 @@ function ContextMenuItem({
   ...props
 }: React.ComponentProps & {
   inset?;
-  variant?: "default" | "destructive";
+  variant: "default" | "destructive";
 }) {
   return (
     

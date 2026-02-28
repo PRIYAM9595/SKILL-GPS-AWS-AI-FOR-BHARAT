@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import * from "react";
+import React from "react";
 import { GripVerticalIcon } from "lucide-react";
 import * from "react-resizable-panels";
 

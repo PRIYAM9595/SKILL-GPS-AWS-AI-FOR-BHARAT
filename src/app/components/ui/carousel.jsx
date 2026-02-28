@@ -1,8 +1,7 @@
 ﻿"use client";
 
-import * from "react";
-import useEmblaCarousel, {
-  type UseEmblaCarouselType,
+import React from "react";
+import useEmblaCarousel, { UseEmblaCarouselType,
 } from "embla-carousel-react";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 
@@ -15,10 +14,10 @@ type CarouselOptions = UseCarouselParameters[0];
 type CarouselPlugin = UseCarouselParameters[1];
 
 type CarouselProps = {
-  opts?: CarouselOptions;
-  plugins?: CarouselPlugin;
-  orientation?: "horizontal" | "vertical";
-  setApi?: (api: CarouselApi) => void;
+  opts: CarouselOptions;
+  plugins: CarouselPlugin;
+  orientation: "horizontal" | "vertical";
+  setApi: (api) => void;
 };
 
 type CarouselContextProps = {
@@ -61,7 +60,7 @@ function Carousel({
   const [canScrollPrev, setCanScrollPrev] = React.useState(false);
   const [canScrollNext, setCanScrollNext] = React.useState(false);
 
-  const onSelect = React.useCallback((api: CarouselApi) => {
+  const onSelect = React.useCallback((api) => {
     if (!api) return;
     setCanScrollPrev(api.canScrollPrev());
     setCanScrollNext(api.canScrollNext());
@@ -76,7 +75,7 @@ function Carousel({
   }, [api]);
 
   const handleKeyDown = React.useCallback(
-    (event: React.KeyboardEvent) => {
+    (event) => {
       if (event.key === "ArrowLeft") {
         event.preventDefault();
         scrollPrev();
@@ -163,8 +162,7 @@ function CarouselNext({
   );
 }
 
-export {
-  type CarouselApi,
+export { CarouselApi,
   Carousel,
   CarouselContent,
   CarouselItem,

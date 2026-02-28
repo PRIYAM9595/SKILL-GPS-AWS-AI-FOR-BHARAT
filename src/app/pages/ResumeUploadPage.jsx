@@ -39,7 +39,7 @@ export default function ResumeUploadPage() {
     }
   };
 
-  const handleFileInput = (e: React.ChangeEvent) => {
+  const handleFileInput = (e) => {
     if (e.target.files && e.target.files[0]) {
       setUploadedFile(e.target.files[0]);
     }
@@ -227,7 +227,7 @@ export default function ResumeUploadPage() {
 }
 
 const features = [
-  { icon: Sparkles, label: "AI-Powered Analysis" },
-  { icon: CheckCircle, label: "Instant Results" },
-  { icon: FileText, label: "Detailed Reports" }
+  { icon, label: "AI-Powered Analysis" },
+  { icon, label: "Instant Results" },
+  { icon, label: "Detailed Reports" }
 ];

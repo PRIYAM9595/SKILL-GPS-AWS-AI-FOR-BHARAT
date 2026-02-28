@@ -4,7 +4,7 @@ import { Brain, Lightbulb, AlertCircle, TrendingUp } from 'lucide-react';
 const insights = [
   {
     type: 'recommendation',
-    icon: Lightbulb,
+    icon,
     color: 'yellow',
     title: 'High-Impact Skill',
     message: 'Learning System Design could increase your salary potential by 28% in the next 6 months.',
@@ -12,7 +12,7 @@ const insights = [
   },
   {
     type: 'warning',
-    icon: AlertCircle,
+    icon,
     color: 'orange',
     title: 'Skill Gap Alert',
     message: 'AWS/Cloud skills are in high demand for your target roles. Consider prioritizing this.',
@@ -20,7 +20,7 @@ const insights = [
   },
   {
     type: 'trend',
-    icon: TrendingUp,
+    icon,
     color: 'green',
     title: 'Market Trend',
     message: 'TypeScript adoption is growing 45% YoY. Your current skill level puts you ahead of 73% of developers.',

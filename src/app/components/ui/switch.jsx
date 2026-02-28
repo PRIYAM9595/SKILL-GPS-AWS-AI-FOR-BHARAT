@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import * from "react";
+import React from "react";
 import * from "@radix-ui/react-switch";
 
 import { cn } from "./utils";

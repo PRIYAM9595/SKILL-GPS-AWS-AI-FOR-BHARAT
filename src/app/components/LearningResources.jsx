@@ -29,9 +29,9 @@ const resources = [
 ];
 
 const typeConfig = {
-  youtube: { icon: Youtube, color: 'red', label: 'Video' },
-  course: { icon: BookOpen, color: 'blue', label: 'Course' },
-  project: { icon: Code2, color: 'green', label: 'Project' },
+  youtube: { icon, color: 'red', label: 'Video' },
+  course: { icon, color: 'blue', label: 'Course' },
+  project: { icon, color: 'green', label: 'Project' },
 };
 
 export function LearningResources() {

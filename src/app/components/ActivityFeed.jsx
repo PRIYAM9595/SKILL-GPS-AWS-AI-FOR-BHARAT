@@ -3,25 +3,25 @@ import { Clock, Check, Play, BookOpen } from 'lucide-react';
 
 const activities = [
   {
-    icon: Check,
+    icon,
     color: 'green',
     title: 'Completed TypeScript Advanced Patterns',
     time: '2 hours ago',
   },
   {
-    icon: Play,
+    icon,
     color: 'blue',
     title: 'Started Node.js Project',
     time: '5 hours ago',
   },
   {
-    icon: BookOpen,
+    icon,
     color: 'purple',
     title: 'Saved 3 new resources',
     time: '1 day ago',
   },
   {
-    icon: Check,
+    icon,
     color: 'green',
     title: 'Skill assessment completed',
     time: '2 days ago',

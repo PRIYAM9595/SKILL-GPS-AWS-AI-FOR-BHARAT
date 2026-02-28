@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import * from "react";
+import React from "react";
 import * from "recharts";
 
 import { cn } from "./utils";
@@ -13,8 +13,8 @@ export type ChartConfig = {
     label?;
     icon?;
   } & (
-    | { color?; theme?: never }
-    | { color?: never; theme: Record }
+    | { color?; theme: never }
+    | { color: never; theme: Record }
   );
 };
 
@@ -108,7 +108,7 @@ function ChartTooltipContent({
   React.ComponentProps & {
     hideLabel?;
     hideIndicator?;
-    indicator?: "line" | "dot" | "dashed";
+    indicator: "line" | "dot" | "dashed";
     nameKey?;
     labelKey?;
   }) {
@@ -248,7 +248,7 @@ function ChartLegendContent({
 
 // Helper to extract item config from a payload.
 function getPayloadConfigFromPayload(
-  config: ChartConfig,
+  config,
   payload,
   key,
 ) {

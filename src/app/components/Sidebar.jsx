@@ -4,19 +4,19 @@ import { useState } from 'react';
 import { Link, useLocation } from 'react-router';
 
 const navItems = [
-  { icon: Home, label: 'Dashboard', path: '/dashboard' },
-  { icon: Upload, label: 'Upload Resume', path: '/upload' },
-  { icon: Target, label: 'Skill Analysis', path: '/analysis' },
-  { icon: Map, label: 'Skill Gaps', path: '/skill-gaps' },
-  { icon: BookOpen, label: 'Learning Navigator', path: '/navigator' },
-  { icon: TrendingUp, label: 'Career Simulation', path: '/simulation' },
-  { icon: BarChart3, label: 'Analytics', path: '/analytics' },
-  { icon: Calendar, label: 'Weekly Planner', path: '/planner' },
+  { icon, label: 'Dashboard', path: '/dashboard' },
+  { icon, label: 'Upload Resume', path: '/upload' },
+  { icon, label: 'Skill Analysis', path: '/analysis' },
+  { icon, label: 'Skill Gaps', path: '/skill-gaps' },
+  { icon, label: 'Learning Navigator', path: '/navigator' },
+  { icon, label: 'Career Simulation', path: '/simulation' },
+  { icon, label: 'Analytics', path: '/analytics' },
+  { icon, label: 'Weekly Planner', path: '/planner' },
 ];
 
 const secondaryItems = [
-  { icon: Settings, label: 'Settings', path: '/settings' },
-  { icon: HelpCircle, label: 'Help & Support', path: '/help' },
+  { icon, label: 'Settings', path: '/settings' },
+  { icon, label: 'Help & Support', path: '/help' },
 ];
 
 export function Sidebar() {

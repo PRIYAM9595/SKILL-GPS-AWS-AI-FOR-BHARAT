@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import * from "react";
+import React from "react";
 import * from "@radix-ui/react-dialog";
 import { XIcon } from "lucide-react";
 
@@ -43,7 +43,7 @@ function SheetContent({
   side = "right",
   ...props
 }: React.ComponentProps & {
-  side?: "top" | "right" | "bottom" | "left";
+  side: "top" | "right" | "bottom" | "left";
 }) {
   return (
     

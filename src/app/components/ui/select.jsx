@@ -1,6 +1,6 @@
 ﻿"use client";
 
-import * from "react";
+import React from "react";
 import * from "@radix-ui/react-select";
 import {
   CheckIcon,
@@ -34,7 +34,7 @@ function SelectTrigger({
   children,
   ...props
 }: React.ComponentProps & {
-  size?: "sm" | "default";
+  size: "sm" | "default";
 }) {
   return (
     
