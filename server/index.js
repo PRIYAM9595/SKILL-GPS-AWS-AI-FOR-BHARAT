@@ -275,10 +275,77 @@ const fallbackWeeklyPlan = (userPrompt) => ({
   ],
   plan: [
     { day: "Monday", task: "Review one core concept and summarize key takeaways.", duration: "1h", priority: "High", type: "Learn", outcome: "Structured concept notes" },
+    { day: "Tuesday", task: "Solve targeted practice questions related to the focus area.", duration: "1h", priority: "Medium", type: "Build", outcome: "Practice answers documented" },
     { day: "Wednesday", task: "Build a small practice task related to your focus area.", duration: "1.5h", priority: "High", type: "Build", outcome: "Working mini project chunk" },
-    { day: "Friday", task: "Reflect on what improved and define next week's target.", duration: "1h", priority: "Medium", type: "Review", outcome: "Weekly retrospective" }
+    { day: "Thursday", task: "Run a mock interview or timed skill checkpoint.", duration: "1h", priority: "Medium", type: "Interview", outcome: "Interview feedback notes" },
+    { day: "Friday", task: "Refactor and improve weak points from prior sessions.", duration: "1h", priority: "High", type: "Review", outcome: "Quality improvements merged" },
+    { day: "Saturday", task: "Publish one visible artifact from this week's work.", duration: "1.5h", priority: "Medium", type: "Build", outcome: "Public artifact shipped" },
+    { day: "Sunday", task: "Review outcomes and define next week's top goals.", duration: "45m", priority: "Low", type: "Review", outcome: "Next-week execution plan" }
   ]
 });
+
+const normalizePlannerDay = (value) => {
+  const dayMap = {
+    monday: "Monday", tuesday: "Tuesday", wednesday: "Wednesday", thursday: "Thursday",
+    friday: "Friday", saturday: "Saturday", sunday: "Sunday",
+    mon: "Monday", tue: "Tuesday", wed: "Wednesday", thu: "Thursday",
+    fri: "Friday", sat: "Saturday", sun: "Sunday"
+  };
+
+  const raw = String(value || "").trim();
+  if (!raw) return null;
+  const lowered = raw.toLowerCase();
+  for (const key of Object.keys(dayMap)) {
+    if (lowered.includes(key)) return dayMap[key];
+  }
+
+  const dt = new Date(raw);
+  if (!Number.isNaN(dt.getTime())) {
+    const day = dt.toLocaleDateString("en-US", { weekday: "long" }).toLowerCase();
+    return dayMap[day] || null;
+  }
+  return null;
+};
+
+const ensureSevenDayPlan = (rawPlan = []) => {
+  const defaults = {
+    Monday: { task: "Review core concept and create concise notes.", duration: "1h", priority: "High", type: "Learn", outcome: "Concept notes ready" },
+    Tuesday: { task: "Practice focused exercises on target skills.", duration: "1h", priority: "Medium", type: "Build", outcome: "Practice log completed" },
+    Wednesday: { task: "Build a mini implementation sprint.", duration: "1.5h", priority: "High", type: "Build", outcome: "Working implementation chunk" },
+    Thursday: { task: "Attempt mock interview or timed challenge.", duration: "1h", priority: "Medium", type: "Interview", outcome: "Performance feedback captured" },
+    Friday: { task: "Fix weaknesses and strengthen quality.", duration: "1h", priority: "High", type: "Review", outcome: "Weak areas improved" },
+    Saturday: { task: "Ship one visible project outcome.", duration: "1.5h", priority: "Medium", type: "Build", outcome: "Artifact published" },
+    Sunday: { task: "Retrospective and next-week planning.", duration: "45m", priority: "Low", type: "Review", outcome: "Next sprint scope finalized" }
+  };
+
+  const normalized = [];
+  (Array.isArray(rawPlan) ? rawPlan : []).forEach((item, idx) => {
+    const day = normalizePlannerDay(item?.day || item?.weekday || item?.dayOfWeek || item?.date || item?.scheduledFor);
+    if (!day) return;
+    normalized.push({
+      day,
+      task: item?.task || item?.title || `Execution Block ${idx + 1}`,
+      duration: item?.duration || item?.time || defaults[day].duration,
+      priority: item?.priority || defaults[day].priority,
+      type: item?.type || defaults[day].type,
+      outcome: item?.outcome || defaults[day].outcome
+    });
+  });
+
+  const days = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
+  const byDay = new Map();
+  normalized.forEach((item) => {
+    if (!byDay.has(item.day)) byDay.set(item.day, item);
+  });
+
+  days.forEach((day) => {
+    if (!byDay.has(day)) {
+      byDay.set(day, { day, ...defaults[day] });
+    }
+  });
+
+  return days.map((d) => byDay.get(d));
+};
 
 const fallbackLearningPath = (role, skills = []) => {
   const normalizedSkills = skills.length > 0 ? skills : ["javascript", "react", "node.js"];
@@ -783,10 +850,15 @@ app.post("/api/gemini/weekly-planner", async (req, res) => {
     "successMetrics": ["metric 1", "metric 2", "metric 3"],
     "plan": [
       { "day": "Monday", "task": "Specific task description", "duration": "1h", "priority": "High|Medium|Low", "type": "Learn|Build|Review|Interview", "outcome": "Specific output for this session" },
+      { "day": "Tuesday", "task": "Specific task description", "duration": "1h", "priority": "High|Medium|Low", "type": "Learn|Build|Review|Interview", "outcome": "Specific output for this session" },
       { "day": "Wednesday", "task": "Specific task description", "duration": "2h", "priority": "High|Medium|Low", "type": "Learn|Build|Review|Interview", "outcome": "Specific output for this session" },
-      { "day": "Friday", "task": "Specific task description", "duration": "1.5h", "priority": "High|Medium|Low", "type": "Learn|Build|Review|Interview", "outcome": "Specific output for this session" }
+      { "day": "Thursday", "task": "Specific task description", "duration": "1h", "priority": "High|Medium|Low", "type": "Learn|Build|Review|Interview", "outcome": "Specific output for this session" },
+      { "day": "Friday", "task": "Specific task description", "duration": "1.5h", "priority": "High|Medium|Low", "type": "Learn|Build|Review|Interview", "outcome": "Specific output for this session" },
+      { "day": "Saturday", "task": "Specific task description", "duration": "1.5h", "priority": "High|Medium|Low", "type": "Learn|Build|Review|Interview", "outcome": "Specific output for this session" },
+      { "day": "Sunday", "task": "Specific task description", "duration": "45m", "priority": "High|Medium|Low", "type": "Learn|Build|Review|Interview", "outcome": "Specific output for this session" }
     ]
   }
+  Create tasks for ALL seven days of the week.
   Keep it practical and concise. Make sure your JSON is clean and strictly conforms to the schema.
   `;
   try {
@@ -797,7 +869,10 @@ app.post("/api/gemini/weekly-planner", async (req, res) => {
       return res.json(fallbackWeeklyPlan(userPrompt));
     }
 
-    return res.json(parsed);
+    return res.json({
+      ...parsed,
+      plan: ensureSevenDayPlan(parsed.plan)
+    });
   } catch (error) {
     console.warn("Weekly planner fallback in use:", error.message);
     res.json(fallbackWeeklyPlan(userPrompt));

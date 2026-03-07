@@ -18,6 +18,8 @@ import CareerSimulationPage from "./pages/CareerSimulationPage";
 import ProgressAnalyticsPage from "./pages/ProgressAnalyticsPage";
 import CompetitiveBenchmarkPage from "./pages/CompetitiveBenchmarkPage";
 import AIWeeklyPlannerPage from "./pages/AIWeeklyPlannerPage";
+import SettingsPage from "./pages/SettingsPage";
+import HelpPage from "./pages/HelpPage";
 
 export default function App() {
   return (
@@ -73,6 +75,8 @@ function MainLayout() {
             <Route path="progress-analytics" element={<ResumeGateRoute><ProgressAnalyticsPage /></ResumeGateRoute>} />
             <Route path="competitive-benchmark" element={<ResumeGateRoute><CompetitiveBenchmarkPage /></ResumeGateRoute>} />
             <Route path="weekly-planner" element={<ResumeGateRoute><AIWeeklyPlannerPage /></ResumeGateRoute>} />
+            <Route path="settings" element={<ResumeGateRoute><SettingsPage /></ResumeGateRoute>} />
+            <Route path="help" element={<ResumeGateRoute><HelpPage /></ResumeGateRoute>} />
 
             {/* Redirect any unknown route to dashboard */}
             <Route path="*" element={<Navigate to="dashboard" />} />

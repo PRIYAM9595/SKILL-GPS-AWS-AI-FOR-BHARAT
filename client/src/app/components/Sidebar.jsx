@@ -1,4 +1,4 @@
-﻿import { Home, Map, BookOpen, Target, BarChart3, Settings, HelpCircle, ChevronRight, ChevronLeft, Upload, TrendingUp, Calendar } from 'lucide-react';
+import { Home, Map, BookOpen, Target, BarChart3, Settings, HelpCircle, Upload, TrendingUp, Calendar, Menu } from 'lucide-react';
 import { useState } from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 
@@ -28,43 +28,65 @@ export function Sidebar() {
     return (
       <NavLink
         to={item.path}
-        className={`flex items-center gap-3 px-4 py-3 mx-2 my-1 rounded-xl transition-all duration-200 ${isActive
-            ? "bg-blue-600/20 text-blue-400 font-medium"
-            : "text-gray-400 hover:bg-white/5 hover:text-white"
+        className={`group relative flex items-center gap-3 px-4 py-3 mx-2 my-1 rounded-xl transition-all duration-200 ${isActive
+            ? "bg-blue-500/15 text-blue-100 border border-blue-400/30"
+            : "text-gray-400 border border-transparent hover:bg-white/5 hover:text-white"
           }`}
       >
-        <Icon size={20} className={isActive ? "text-blue-400" : ""} />
+        {isActive && <span className="absolute left-0 top-2.5 h-7 w-1 rounded-r-full bg-blue-400" />}
+        <Icon size={18} className={isActive ? "text-blue-300" : "text-gray-500 group-hover:text-gray-300"} />
         {!collapsed && <span className="truncate">{item.label}</span>}
       </NavLink>
     );
   };
 
   return (
-    <div className={`h-screen bg-[#0A0A0A] border-r border-white/10 text-white flex flex-col transition-all duration-300 relative ${collapsed ? 'w-20' : 'w-64'}`}>
+    <div className={`h-screen bg-[#0B111B] border-r border-slate-800 text-white flex flex-col transition-all duration-300 relative ${collapsed ? 'w-20' : 'w-72'}`}>
+      <div className="px-3 py-4 border-b border-slate-800 bg-slate-950/40">
+        <div className={`flex items-center ${collapsed ? 'justify-center' : 'justify-between'}`}>
+          {!collapsed && (
+            <NavLink to="/app/dashboard" className="flex items-center gap-3 min-w-0">
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-600 to-cyan-600 flex items-center justify-center text-white font-semibold shadow-lg shadow-blue-900/30">
+                SB
+              </div>
+              <div className="min-w-0">
+                <p className="font-semibold text-white leading-tight truncate tracking-wide">SkillBuild</p>
+                <p className="text-xs text-slate-400 leading-tight truncate">Professional Workspace</p>
+              </div>
+            </NavLink>
+          )}
 
-      {/* Toggle button */}
-      <button
-        onClick={() => setCollapsed(!collapsed)}
-        className="absolute -right-3 top-6 w-6 h-6 rounded-full bg-[#1A1A1A] border border-white/20 text-gray-400 hover:text-white flex items-center justify-center shadow-lg transition-transform z-50"
-      >
-        {collapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
-      </button>
+          <button
+            onClick={() => setCollapsed(!collapsed)}
+            aria-label="Toggle sidebar"
+            className={`w-9 h-9 rounded-lg bg-slate-900 border border-slate-700 text-slate-300 hover:text-white hover:bg-slate-800 transition-colors flex items-center justify-center ${collapsed ? '' : 'ml-2'}`}
+          >
+            <Menu size={18} />
+          </button>
+        </div>
+      </div>
 
       {/* Primary navigation */}
-      <nav className="flex-1 overflow-y-auto py-6 space-y-1 custom-scrollbar">
+      <nav className="flex-1 overflow-y-auto py-4 space-y-1 custom-scrollbar">
+        {!collapsed && (
+          <p className="px-4 pt-1 pb-2 text-[11px] uppercase tracking-[0.2em] text-slate-500">Main</p>
+        )}
         {navItems.map((item) => <NavItem key={item.path} item={item} />)}
       </nav>
 
       {/* Secondary navigation */}
-      <nav className="border-t border-white/10 py-4 space-y-1">
+      <nav className="border-t border-slate-800 py-4 space-y-1">
+        {!collapsed && (
+          <p className="px-4 pt-1 pb-2 text-[11px] uppercase tracking-[0.2em] text-slate-500">Support</p>
+        )}
         {secondaryItems.map((item) => <NavItem key={item.path} item={item} />)}
       </nav>
 
       {/* Version info */}
       {!collapsed && (
-        <div className="border-t border-white/10 px-6 py-4 text-xs text-gray-500 bg-white/5">
-          <p className="font-medium text-gray-400">SkillGPS v2.0</p>
-          <p className="flex items-center gap-1 mt-1"><span className="w-1.5 h-1.5 rounded-full bg-green-500"></span> Systems Online</p>
+        <div className="border-t border-slate-800 px-5 py-4 text-xs text-slate-500 bg-slate-950/40">
+          <p className="font-medium text-slate-300">SkillGPS v2.0</p>
+          <p className="flex items-center gap-2 mt-1.5"><span className="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>Systems Online</p>
         </div>
       )}
     </div>

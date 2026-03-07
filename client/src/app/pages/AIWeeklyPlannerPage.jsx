@@ -46,9 +46,13 @@ export default function AIWeeklyPlannerPage() {
       "Close one skill gap"
     ],
     plan: [
-      { day: "Mon", task: "Review one core concept and summarize notes.", duration: "1h", priority: "High", type: "Learn", outcome: "Structured concept notes" },
-      { day: "Wed", task: "Build one hands-on mini exercise from that concept.", duration: "1.5h", priority: "High", type: "Build", outcome: "Working mini project chunk" },
-      { day: "Fri", task: "Revise weak points and document improvements.", duration: "1h", priority: "Medium", type: "Review", outcome: "Weekly retrospective" }
+      { day: "Mon", task: "Review core concepts and write concise notes.", duration: "1h", priority: "High", type: "Learn", outcome: "Structured concept notes" },
+      { day: "Tue", task: "Solve 3 targeted practice questions.", duration: "1h", priority: "Medium", type: "Build", outcome: "Practice log with solutions" },
+      { day: "Wed", task: "Build one hands-on mini exercise.", duration: "1.5h", priority: "High", type: "Build", outcome: "Working mini project chunk" },
+      { day: "Thu", task: "Run a timed mock interview or quiz.", duration: "1h", priority: "Medium", type: "Interview", outcome: "Mock performance notes" },
+      { day: "Fri", task: "Refine weak points and improve implementation.", duration: "1h", priority: "High", type: "Review", outcome: "Improvement checklist completed" },
+      { day: "Sat", task: "Ship one visible artifact (repo update/post).", duration: "1.5h", priority: "Medium", type: "Build", outcome: "Published weekly artifact" },
+      { day: "Sun", task: "Review weekly progress and plan next sprint.", duration: "45m", priority: "Low", type: "Review", outcome: "Next-week strategy drafted" }
     ]
   });
 
@@ -57,20 +61,76 @@ export default function AIWeeklyPlannerPage() {
       monday: "Mon", tuesday: "Tue", wednesday: "Wed", thursday: "Thu", friday: "Fri", saturday: "Sat", sunday: "Sun",
       mon: "Mon", tue: "Tue", wed: "Wed", thu: "Thu", fri: "Fri", sat: "Sat", sun: "Sun"
     };
-    const key = String(dayValue || "").trim().toLowerCase();
-    return dayMap[key] || "Mon";
+    const raw = String(dayValue || "").trim();
+    if (!raw) return null;
+
+    const lowered = raw.toLowerCase();
+    for (const key of Object.keys(dayMap)) {
+      if (lowered.includes(key)) return dayMap[key];
+    }
+
+    const alphaOnly = lowered.replace(/[^a-z]/g, "");
+    if (dayMap[alphaOnly]) return dayMap[alphaOnly];
+
+    const parsedDate = new Date(raw);
+    if (!Number.isNaN(parsedDate.getTime())) {
+      const day = parsedDate.toLocaleDateString("en-US", { weekday: "short" });
+      return dayMap[String(day).toLowerCase()] || null;
+    }
+
+    return null;
   };
 
   const normalizePlanPayload = (raw) => {
-    const rows = Array.isArray(raw?.plan) ? raw.plan : Array.isArray(raw?.tasks) ? raw.tasks : [];
+    const rows = Array.isArray(raw?.plan)
+      ? raw.plan
+      : Array.isArray(raw?.tasks)
+        ? raw.tasks
+        : raw?.plan && typeof raw.plan === "object"
+          ? Object.entries(raw.plan).flatMap(([dayKey, value]) => {
+              if (Array.isArray(value)) {
+                return value.map((task) => ({ ...task, day: task?.day || task?.weekday || dayKey }));
+              }
+              if (value && typeof value === "object") {
+                return [{ ...value, day: value?.day || value?.weekday || dayKey }];
+              }
+              return [{ day: dayKey, task: String(value || "").trim() }];
+            })
+          : [];
+
     const plan = rows.map((task, index) => ({
-      day: toShortDay(task?.day || task?.weekday || "Mon"),
+      day: toShortDay(task?.day || task?.weekday || task?.dayOfWeek || task?.date || task?.scheduledFor) || "Mon",
       task: task?.task || task?.title || `Study Session ${index + 1}`,
       duration: task?.duration || task?.time || "1h",
       priority: task?.priority || "Medium",
       type: task?.type || "Learn",
       outcome: task?.outcome || "Session completed with notes"
-    }));
+    })).filter((task) => String(task.task || "").trim().length > 0);
+
+    const daySeedTasks = {
+      Mon: "Plan the week and study core concepts.",
+      Tue: "Practice focused problem-solving tasks.",
+      Wed: "Build a hands-on implementation task.",
+      Thu: "Run a mock interview or timed challenge.",
+      Fri: "Review mistakes and strengthen weak areas.",
+      Sat: "Ship a visible portfolio increment.",
+      Sun: "Retrospective and next-week planning."
+    };
+
+    const daysPresent = new Set(plan.map((p) => p.day));
+    const filledPlan = [...plan];
+    weekDays.forEach((day) => {
+      if (!daysPresent.has(day)) {
+        filledPlan.push({
+          day,
+          task: daySeedTasks[day],
+          duration: day === "Sun" ? "45m" : "1h",
+          priority: day === "Mon" || day === "Wed" || day === "Fri" ? "High" : "Medium",
+          type: day === "Thu" ? "Interview" : day === "Sun" ? "Review" : "Build",
+          outcome: "Daily consistency block completed"
+        });
+      }
+    });
 
     return {
       weekOf: raw?.weekOf || raw?.week || "Current Week",
@@ -79,7 +139,7 @@ export default function AIWeeklyPlannerPage() {
       whyThisWeek: raw?.whyThisWeek || "This plan balances consistency and impact.",
       intensity: raw?.intensity || "Medium",
       successMetrics: Array.isArray(raw?.successMetrics) ? raw.successMetrics : ["Complete planned sessions"],
-      plan
+      plan: filledPlan
     };
   };
 
@@ -92,10 +152,17 @@ export default function AIWeeklyPlannerPage() {
         userPrompt: userPrompt.trim() || "I want to improve my general tech skills this week"
       });
       const normalized = normalizePlanPayload(data);
-      setPlannerData(normalized.plan.length ? normalized : localFallbackPlan(userPrompt.trim()));
+      const planData = normalized.plan.length ? normalized : localFallbackPlan(userPrompt.trim());
+      setPlannerData(planData);
+
+      const firstDayWithTasks = weekDays.find((day) => planData.plan.some((task) => task.day === day));
+      setSelectedDay(firstDayWithTasks || "Mon");
     } catch (err) {
       setError(err.message || "Failed to generate weekly plan.");
-      setPlannerData(localFallbackPlan(userPrompt.trim()));
+      const fallbackData = localFallbackPlan(userPrompt.trim());
+      setPlannerData(fallbackData);
+      const firstDayWithTasks = weekDays.find((day) => fallbackData.plan.some((task) => task.day === day));
+      setSelectedDay(firstDayWithTasks || "Mon");
     } finally {
       setIsLoading(false);
     }
